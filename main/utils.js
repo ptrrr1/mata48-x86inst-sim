@@ -80,6 +80,19 @@ export class Utils {
     }
 
     /**
+     * 
+     * @param {number} val 
+     * @returns {string}
+     */
+    static eval_flag(val) {
+        let newFlag = "00000000000000000011000000000010";
+        newFlag = Utils.set_flag_bit(newFlag, "OF", HexOperations.is_overflow(val));
+        newFlag = Utils.set_flag_bit(newFlag, "ZF", HexOperations.is_neg(val));
+        newFlag = Utils.set_flag_bit(newFlag, "SF", HexOperations.is_zero(val));
+        return newFlag;
+    }
+
+    /**
      * retorna um objeto com os valores de cada registrador
      * @param {Document} document 
      * @returns {RegistersState}
@@ -132,5 +145,113 @@ export class Utils {
         document.getElementById("edi").value = registers_state.offset.edi;
         document.getElementById("esi").value = registers_state.offset.esi;
         document.getElementById("rflag").innerText = registers_state.flag;
+    }
+}
+
+export class HexOperations {
+    /**
+     * @param {number} val 
+     * @returns {string} "1" | "0"
+     */
+    static is_zero(val) {
+        return val == 0 || val == 4294967296 ? "1" : "0"
+    }
+
+    /**
+     * @param {number} val 
+     * @returns {string} "1" | "0"
+     */
+    static is_neg(val) {
+        return val < 0 ? "1" : "0"
+    }
+
+    static is_overflow(val) {
+        return val > 0xFFFFFFFF ? "1" : "0"
+    }
+
+    /**
+     * @param {string} a 
+     * @param {number} b 
+     * @param {number} radix 
+     * @returns 
+     */
+    static add(a, b, radix) {
+        const val = parseInt(a, radix);
+        return val + b
+    }
+
+    /**
+     * @param {string} a 
+     * @param {number} b 
+     * @param {number} radix 
+     * @returns 
+     */
+    static sub(a, b, radix) {
+        const val = parseInt(a, radix);
+        return val - b
+    }
+
+    /**
+     * @param {string} a 
+     * @param {number} b 
+     * @param {number} radix 
+     * @returns 
+     */
+    static mul(a, b, radix) {
+        const val = parseInt(a, radix);
+        return val * b
+    }
+
+    /**
+     * @param {string} a 
+     * @param {number} radix 
+     * @returns 
+     */
+    static neg(a, radix) {
+        const val = parseInt(a, radix);
+        return 0 - val;
+    }
+
+    /**
+     * @param {string} a 
+     * @param {number} b 
+     * @param {number} radix 
+     * @returns 
+     */
+    static and(a, b, radix) {
+        const val = parseInt(a, radix);
+        return val & b;
+    }
+
+    /**
+     * @param {string} a 
+     * @param {number} b 
+     * @param {number} radix 
+     * @returns 
+     */
+    static or(a, b, radix) {
+        const val = parseInt(a, radix);
+        return val | b;
+    }
+
+    /**
+     * @param {string} a 
+     * @param {number} radix 
+     * @returns 
+     */
+    static not(a, radix) {
+        const val = parseInt(a, radix);
+        return ~val;
+    }
+
+    /**
+     * @param {string} a 
+     * @param {number} b 
+     * @param {number} radix 
+     * @returns 
+     */
+    static xor(a, b, radix) {
+        const val = parseInt(a, radix);
+        return val ^ b;
     }
 }

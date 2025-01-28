@@ -50,134 +50,123 @@
         </div>
         <!-- -------------------------------------------------------- -->
         <div id="other">
-            <div>
-                <table id="sdt">
-                    <tr>
-                        <td>SELETOR</td>
-                        <td>END. BASE SEG</td>
-                        <td>END. LIMIT</td>
-                        <td>ACESSO</td>
-                    </tr>
-                    <tr>
-                        <td>0x000A</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="base-cs" type="text" value="00000000"></td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="limit-cs" type="text" value="00000000"></td>
-                        <td>11</td>
-                    </tr>
-                    <tr>
-                        <td>0x000B</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="base-ss" type="text" value="00000000"></td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="limit-ss" type="text" value="00000000"></td>
-                        <td>11</td>
-                    </tr>
-                    <tr>
-                        <td>0x000C</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="base-ds" type="text" value="00000000"></td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="limit-ds" type="text" value="00000000"></td>
-                        <td>11</td>
-                    </tr>
-                </table>
-            </div>
+            <table id="sdt">
+                <tr>
+                    <td>SELETOR</td>
+                    <td>END. BASE SEG</td>
+                    <td>END. LIMIT</td>
+                    <td>ACESSO</td>
+                </tr>
+                <tr>
+                    <td>0x000A</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="base-cs" type="text" value="A0000000"></td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="limit-cs" type="text" value="A000FFFF"></td>
+                    <td>11</td>
+                </tr>
+                <tr>
+                    <td>0x000B</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="base-ss" type="text" value="B0000000"></td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="limit-ss" type="text" value="B000FFFF"></td>
+                    <td>11</td>
+                </tr>
+                <tr>
+                    <td>0x000C</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="base-ds" type="text" value="C0000000"></td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="limit-ds" type="text" value="C000FFFF"></td>
+                    <td>11</td>
+                </tr>
+            </table>
             <!-- -------------------------------------------------------- -->
-            <div>
-                <table id="geral">
-                    <tr>
-                        <td>GERAL</td>
-                        <td>32BITS</td>
-                    </tr>
-                    <tr>
-                        <td>EAX</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="eax" type="text" value="00000000"></td>
-                    </tr>
-                    <tr>
-                        <td>EBX</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="ebx" type="text" value="00000000"></td>
-                    </tr>
-                    <tr>
-                        <td>ECX</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="ecx" type="text" value="00000000"></td>
-                    </tr>
-                    <tr>
-                        <td>EDX</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="edx" type="text" value="00000000"></td>
-                    </tr>
-                </table>
-            </div>
+            <table id="geral">
+                <tr>
+                    <td>GERAL</td>
+                    <td>32BITS</td>
+                </tr>
+                <tr>
+                    <td>EAX</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="eax" type="text" value="00000000"></td>
+                </tr>
+                <tr>
+                    <td>EBX</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="ebx" type="text" value="00000000"></td>
+                </tr>
+                <tr>
+                    <td>ECX</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="ecx" type="text" value="00000000"></td>
+                </tr>
+                <tr>
+                    <td>EDX</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="edx" type="text" value="00000000"></td>
+                </tr>
+            </table>
             <!-- -------------------------------------------------------- -->
-            <div>
-                <table id="segmentos">
-                    <tr>
-                        <td>SEGMENTOS</td>
-                        <td>16BITS</td>
-                    </tr>
-                    <tr>
-                        <td>CS</td>
-                        <td>0x000A</td>
-                    </tr>
-                    <tr>
-                        <td>SS</td>
-                        <td>0x000B</td>
-                    </tr>
-                    <tr>
-                        <td>DS</td>
-                        <td>0x000C</td>
-                    </tr>
-                    <tr>
-                        <td>ES</td>
-                        <td>0x000C</td>
-                    </tr>
-                    <tr>
-                        <td>FS</td>
-                        <td>0x000A</td>
-                    </tr>
-                    <tr>
-                        <td>GS</td>
-                        <td>0x000B</td>
-                    </tr>
-                </table>
-            </div>
+            <table id="segmentos">
+                <tr>
+                    <td>SEGMENTOS</td>
+                    <td>16BITS</td>
+                </tr>
+                <tr>
+                    <td>CS</td>
+                    <td>0x000A</td>
+                </tr>
+                <tr>
+                    <td>SS</td>
+                    <td>0x000B</td>
+                </tr>
+                <tr>
+                    <td>DS</td>
+                    <td>0x000C</td>
+                </tr>
+                <tr>
+                    <td>ES</td>
+                    <td>0x000C</td>
+                </tr>
+                <tr>
+                    <td>FS</td>
+                    <td>0x000A</td>
+                </tr>
+                <tr>
+                    <td>GS</td>
+                    <td>0x000B</td>
+                </tr>
+            </table>
             <!-- -------------------------------------------------------- -->
-            <div>
-                <table id="offset">
-                    <tr>
-                        <td>OFFSET</td>
-                        <td>32BITS</td>
-                    </tr>
-                    <tr>
-                        <td>EIP</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="eip" type="text" value="00000000"></td>
-                    </tr>
-                    <tr>
-                        <td>ESP</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="esp" type="text" value="00000000"></td>
-                    </tr>
-                    <tr>
-                        <td>EDP</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="edp" type="text" value="00000000"></td>
-                    </tr>
-                    <tr>
-                        <td>EDI</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="edi" type="text" value="00000000"></td>
-                    </tr>
-                    <tr>
-                        <td>ESI</td>
-                        <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="esi" type="text" value="00000000"></td>
-                    </tr>
-                </table>
-            </div>
+            <table id="offset">
+                <tr>
+                    <td>OFFSET</td>
+                    <td>32BITS</td>
+                </tr>
+                <tr>
+                    <td>EIP</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="eip" type="text" value="00000000"></td>
+                </tr>
+                <tr>
+                    <td>ESP</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="esp" type="text" value="00000000"></td>
+                </tr>
+                <tr>
+                    <td>EDP</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="edp" type="text" value="00000000"></td>
+                </tr>
+                <tr>
+                    <td>EDI</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="edi" type="text" value="00000000"></td>
+                </tr>
+                <tr>
+                    <td>ESI</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="esi" type="text" value="00000000"></td>
+                </tr>
+            </table>
             <!-- -------------------------------------------------------- -->
-            <div>    
-                <table id="flag">
-                    <tr>
-                        <td>FLAG</td>
-                        <td>32BITS</td>
-                    </tr>
-                    <tr>
-                        <td>FLAG</td>
-                        <td id="rflag">00000000000000000000000000000010</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+            <table id="flag">
+                <tr>
+                    <td>FLAG</td>
+                    <td>32BITS</td>
+                </tr>
+                <tr>
+                    <td>FLAG</td>
+                    <td id="rflag">00000000000000000011000000000010</td>
+                </tr>
+            </table>
     </body>
 </html>
