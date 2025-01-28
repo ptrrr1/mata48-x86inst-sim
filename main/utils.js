@@ -1,7 +1,6 @@
 /**
  * Represents the state of CPU registers and flags.
  * @typedef {Object} RegistersState
- * @property {string} addr - The address to be passed to EIP
  * @property {string} inst - The value of the selected instruction.
  * @property {string} dst - The DST address 
  * @property {string} src - The SRC address
@@ -10,13 +9,6 @@
  * @property {string} geral.ebx - The value of the EBX register.
  * @property {string} geral.ecx - The value of the ECX register.
  * @property {string} geral.edx - The value of the EDX register.
- * @property {Object} segmentos - Segment registers.
- * @property {string} segmentos.cs - The value of the CS register.
- * @property {string} segmentos.ss - The value of the SS register.
- * @property {string} segmentos.ds - The value of the DS register.
- * @property {string} segmentos.es - The value of the ES register.
- * @property {string} segmentos.fs - The value of the FS register.
- * @property {string} segmentos.gs - The value of the GS register.
  * @property {Object} offset - Offset registers.
  * @property {string} offset.eip - The value of the EIP register.
  * @property {string} offset.esp - The value of the ESP register.
@@ -24,6 +16,13 @@
  * @property {string} offset.edi - The value of the EDI register.
  * @property {string} offset.esi - The value of the ESI register.
  * @property {string} flag - The value of the FLAG register.
+ * @property {object} sdt - Descriptor table
+ * @property {string} sdt.base_cs
+ * @property {string} sdt.limit_cs
+ * @property {string} sdt.base_ss
+ * @property {string} sdt.limit_ss
+ * @property {string} sdt.base_ds
+ * @property {string} sdt.limit_ds
  */
 
 export class Utils {
@@ -31,9 +30,16 @@ export class Utils {
      * Converte o valor para a base desejada
      * @param {string | number} num 
      * @param {number} radix 
-     * @returns {string}
+     * @param {number} size 
+     * @returns {string}    
      */
-    static str_to_radix(num, radix) { return (parseInt(num) >>> 0).toString(radix).padStart(radix == 2 ? 32 : 8, "0") }
+    static num_to_radix(num, radix, size = 8) {
+        const newVal =  (parseInt(num) >>> 0)
+                            .toString(radix)
+                            .padStart(size, "0")
+        if (newVal.length == 8) { return newVal }
+        else { return newVal.slice(newVal.length - 8, newVal.length) }
+    }
 
     /**
      * Muda o respectivo bit flag para o desejado de acordo com o código
@@ -82,7 +88,6 @@ export class Utils {
         const inst = document.getElementById("inst");
 
         return {
-            addr: document.getElementById("addr").value,
             inst: inst.options[inst.selectedIndex].value,
             dst: document.getElementById("dst").value,
             src: document.getElementById("src").value,
@@ -92,14 +97,6 @@ export class Utils {
                 ecx: document.getElementById("ecx").value,
                 edx: document.getElementById("edx").value,
             },
-            segmentos: {
-                cs: document.getElementById("cs").value,
-                ss: document.getElementById("ss").value,
-                ds: document.getElementById("ds").value,
-                es: document.getElementById("es").value,
-                fs: document.getElementById("fs").value,
-                gs: document.getElementById("gs").value,
-            },
             offset: {
                 eip: document.getElementById("eip").value,
                 esp: document.getElementById("esp").value,
@@ -108,6 +105,14 @@ export class Utils {
                 esi: document.getElementById("esi").value,
             },
             flag: document.getElementById("rflag").innerText,
+            sdt: {
+                base_cs: document.getElementById("base-cs").value,
+                limit_cs: document.getElementById("limit-cs").value,
+                base_ss: document.getElementById("base-ss").value,
+                limit_ss: document.getElementById("limit-ss").value,
+                base_ds: document.getElementById("base-ds").value,
+                limit_ds: document.getElementById("limit-ds").value,
+            }
         }
     }
 
@@ -121,12 +126,6 @@ export class Utils {
         document.getElementById("ebx").value = registers_state.geral.ebx;
         document.getElementById("ecx").value = registers_state.geral.ecx;
         document.getElementById("edx").value = registers_state.geral.edx;
-        document.getElementById("cs").value = registers_state.segmentos.cs;
-        document.getElementById("ss").value = registers_state.segmentos.ss;
-        document.getElementById("ds").value = registers_state.segmentos.ds;
-        document.getElementById("es").value = registers_state.segmentos.es;
-        document.getElementById("fs").value = registers_state.segmentos.fs;
-        document.getElementById("gs").value = registers_state.segmentos.gs;
         document.getElementById("eip").value = registers_state.offset.eip;
         document.getElementById("esp").value = registers_state.offset.esp;
         document.getElementById("edp").value = registers_state.offset.edp;
