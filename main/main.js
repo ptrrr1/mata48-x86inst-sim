@@ -1,5 +1,4 @@
-import { Utils } from "./utils.js";
-import { HexOperations } from "./hexUtils.js";
+import { Utils, HexOperations } from "./utils.js";
 
 const dst = document.getElementById("dst");
 const src = document.getElementById("src");
@@ -81,7 +80,7 @@ button.addEventListener("click", (e) => {
 
             break;
         case "add":
-            if (regdst.length == 3) {
+            if (regdst.length == 3 && regsrc.length == 3) {
                 const v = parseInt(registerValues.geral[regsrc], 16);
                 const newVal = HexOperations.add(registerValues.geral[regdst], v, 16);
                 // new Flag
@@ -98,7 +97,7 @@ button.addEventListener("click", (e) => {
             }
             break;
         case "sub":
-            if (regdst.length == 3) {
+            if (regdst.length == 3 && regsrc.length == 3) {
                 const v = parseInt(registerValues.geral[regsrc], 16);
                 const newVal = HexOperations.sub(registerValues.geral[regdst], v, 16);
                 // new Flag
@@ -115,7 +114,7 @@ button.addEventListener("click", (e) => {
             }
             break;
         case "mul":
-            if (regdst.length == 3) {
+            if (regsrc.length == 3) {
                 const v = parseInt(registerValues.geral.eax, 16);
                 const newVal = HexOperations.mul(registerValues.geral[regsrc], v, 16);
                 // new Flag
@@ -166,6 +165,7 @@ button.addEventListener("click", (e) => {
         case "neg":
             if (regdst.length == 3) {
                 const newVal = HexOperations.neg(registerValues.geral[regdst], 16);
+                console.log(newVal)
                 // new Flag
                 let newFlag = Utils.eval_flag(newVal);
                 // Set new values
@@ -180,7 +180,7 @@ button.addEventListener("click", (e) => {
             }
             break;
         case "and":
-            if (regdst.length == 3) {
+            if (regdst.length == 3 && regsrc.length == 3) {
                 const v = parseInt(registerValues.geral[regsrc], 16);
                 const newVal = HexOperations.and(registerValues.geral[regdst], v, 16);
                 // new Flag
@@ -197,7 +197,7 @@ button.addEventListener("click", (e) => {
             }
             break;
         case "or":
-            if (regdst.length == 3) {
+            if (regdst.length == 3 && regsrc.length == 3) {
                 const v = parseInt(registerValues.geral[regsrc], 16);
                 const newVal = HexOperations.or(registerValues.geral[regdst], v, 16);
                 // new Flag
@@ -214,7 +214,7 @@ button.addEventListener("click", (e) => {
             }
             break;
         case "xor":
-            if (regdst.length == 3) {
+            if (regdst.length == 3 && regsrc.length == 3) {
                 const v = parseInt(registerValues.geral[regsrc], 16);
                 const newVal = HexOperations.xor(registerValues.geral[regdst], v, 16);
                 // new Flag
@@ -247,10 +247,39 @@ button.addEventListener("click", (e) => {
             }
             break;
         case "cmp":
-
+            if (regdst.length == 3 && regsrc.length == 3) {
+                const v = parseInt(registerValues.geral[regsrc], 16);
+                const newVal = HexOperations.sub(registerValues.geral[regdst], v, 16);
+                console.log(newVal < 0)
+                // new Flag
+                let newFlag = Utils.eval_flag(newVal);
+                // Set new values
+                Utils.set_register_values(document, {
+                    ...registerValues,
+                    flag: newFlag
+                });
+            }
             break;
         case "jmp":
+            if (regdst.length == 3) {
 
+            } else {
+                const v = parseInt(regdst, 16);
+                const newVal = HexOperations.add(registerValues.sdt.base_cs, v, 16);
+                const limit = parseInt(registerValues.sdt.limit_cs, 16);
+                if (newVal > limit) {
+                    console.error("GPF");
+                } else {
+                    // Set new values
+                    Utils.set_register_values(document, {
+                        ...registerValues,
+                        offset: {
+                            ...registerValues.offset,
+                            eip: Utils.num_to_radix(v, 16)
+                        },
+                    });
+                }
+            }
             break;
         case "jxx":
 

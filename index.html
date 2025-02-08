@@ -10,23 +10,24 @@
         <script src="main/main.js" type="module" defer></script>
     </head>
     <body>
+    <div id="container">
         <div id="main">
             <button type="submit" id="exec">Executar</button>
         <!-- -------------------------------------------------------- -->
             <select name="Instruções" id="inst">
                 <optgroup label="Moves">
-                <option value="move">MOVE</option>
-                <option value="push">PUSH</option>
-                <option value="pop">POP</option>
-                <option value="xchg">XCHG</option>
+                    <option value="move">MOVE</option>
+                    <option value="push">PUSH</option>
+                    <option value="pop">POP</option>
+                    <option value="xchg">XCHG</option>
                 </optgroup>
                 <optgroup label="Aritimética">
-                <option value="add">ADD</option>
-                <option value="sub">SUB</option>
-                <option value="mul">MUL</option>
-                <option value="inc">INC</option>
-                <option value="dec">DEC</option>
-                <option value="neg">NEG</option>
+                    <option value="add">ADD</option>
+                    <option value="sub">SUB</option>
+                    <option value="mul">MUL</option>
+                    <option value="inc">INC</option>
+                    <option value="dec">DEC</option>
+                    <option value="neg">NEG</option>
                 </optgroup>
                 <optgroup label="Booleano">
                     <option value="and">AND</option>
@@ -61,19 +62,19 @@
                     <td>0x000A</td>
                     <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="base-cs" type="text" value="A0000000"></td>
                     <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="limit-cs" type="text" value="A000FFFF"></td>
-                    <td>11</td>
+                    <td>3</td>
                 </tr>
                 <tr>
                     <td>0x000B</td>
                     <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="base-ss" type="text" value="B0000000"></td>
                     <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="limit-ss" type="text" value="B000FFFF"></td>
-                    <td>11</td>
+                    <td>3</td>
                 </tr>
                 <tr>
                     <td>0x000C</td>
                     <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="base-ds" type="text" value="C0000000"></td>
                     <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="limit-ds" type="text" value="C000FFFF"></td>
-                    <td>11</td>
+                    <td>3</td>
                 </tr>
             </table>
             <!-- -------------------------------------------------------- -->
@@ -142,7 +143,11 @@
                 </tr>
                 <tr>
                     <td>ESP</td>
-                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="esp" type="text" value="00000000"></td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="esp" type="text" value="FFFFFFFF"></td>
+                </tr>
+                <tr>
+                    <td>EBP</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="ebp" type="text" value="FFFFFFFF"></td>
                 </tr>
                 <tr>
                     <td>EDP</td>
@@ -168,5 +173,25 @@
                     <td id="rflag">00000000000000000011000000000010</td>
                 </tr>
             </table>
+            <!-- -------------------------------------------------------- -->
+            <table id="mem">
+                <tr>
+                    <td>MEM</td>
+                    <td>32BITS</td>
+                </tr>
+                <tr>
+                    <td>DST</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="memdst" type="text" placeholder="MEM DST"></td>
+                </tr>
+                <tr>
+                    <td>SRC</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="memsrc" type="text" placeholder="MEM SRC"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="steps">
+
+    </div>
     </body>
 </html>

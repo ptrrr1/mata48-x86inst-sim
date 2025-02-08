@@ -23,6 +23,8 @@
  * @property {string} sdt.limit_ss
  * @property {string} sdt.base_ds
  * @property {string} sdt.limit_ds
+ * @property {string} memdst
+ * @property {string} memsrc
  */
 
 export class Utils {
@@ -52,25 +54,24 @@ export class Utils {
         let idx = -1;
         switch (code) {
             case "CF": // CARRY
+                bitstate == "1" ? console.log("CF") : console.log();
                 idx = flag.length - 1;
                 break;
             case "PF": // PARITY The number of 1s in the least significant byte of the result is even.
+                bitstate == "1" ? console.log("PF") : console.log();
                 idx = flag.length - 1 - 2;
                 break
-            case "AF": // AUXILIARY CARRY Used for binary-coded decimal (BCD) arithmetic
-                idx = flag.length - 1 - 4;
-                break
             case "ZF": // ZERO The result of an operation is zero
+                bitstate == "1" ? console.log("ZF") : console.log();
                 idx = flag.length - 1 - 6;
                 break
             case "SF": // SIGN The result is negative
+                bitstate == "1" ? console.log("SF") : console.log();
                 idx = flag.length - 1 - 7;
                 break
             case "OF": // OVERFLOW Indicates whether an arithmetic operation results in a signed overflow
+                bitstate == "1" ? console.log("OF") : console.log();
                 idx = flag.length - 1 - 11;
-                break
-            case "IOPL": // IO PRIVILEGE LEVEL Determines the privilege level of the current process
-                idx = flag.length - 1 - 13; // 12 & 13
                 break
             default:
                 break;
@@ -87,8 +88,9 @@ export class Utils {
     static eval_flag(val) {
         let newFlag = "00000000000000000011000000000010";
         newFlag = Utils.set_flag_bit(newFlag, "OF", HexOperations.is_overflow(val));
-        newFlag = Utils.set_flag_bit(newFlag, "ZF", HexOperations.is_neg(val));
-        newFlag = Utils.set_flag_bit(newFlag, "SF", HexOperations.is_zero(val));
+        newFlag = Utils.set_flag_bit(newFlag, "SF", HexOperations.is_neg(val));
+        newFlag = Utils.set_flag_bit(newFlag, "ZF", HexOperations.is_zero(val));
+        newFlag = Utils.set_flag_bit(newFlag, "PF", HexOperations.parity_check(val));
         return newFlag;
     }
 
@@ -125,7 +127,9 @@ export class Utils {
                 limit_ss: document.getElementById("limit-ss").value,
                 base_ds: document.getElementById("base-ds").value,
                 limit_ds: document.getElementById("limit-ds").value,
-            }
+            },
+            memdst: document.getElementById("memdst").value,
+            memsrc: document.getElementById("memsrc").value
         }
     }
 
@@ -145,6 +149,8 @@ export class Utils {
         document.getElementById("edi").value = registers_state.offset.edi;
         document.getElementById("esi").value = registers_state.offset.esi;
         document.getElementById("rflag").innerText = registers_state.flag;
+        document.getElementById("memdst").value = registers_state.memdst;
+        document.getElementById("memsrc").value = registers_state.memsrc;
     }
 }
 
@@ -165,8 +171,26 @@ export class HexOperations {
         return val < 0 ? "1" : "0"
     }
 
+    /**
+     * @param {number} val 
+     * @returns {string} "1" | "0"
+     */
     static is_overflow(val) {
         return val > 0xFFFFFFFF ? "1" : "0"
+    }
+
+    /**
+     * @param {number} val 
+     * @returns {string} "1" | "0"
+     */
+    static parity_check(val) {
+        let s = 0;
+        while (val > 0) {
+            val &= val - 1;
+            s++;
+        }
+
+        return s % 2 == 0 ? "1" : "0"
     }
 
     /**
