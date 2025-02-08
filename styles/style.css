@@ -21,28 +21,29 @@ div {
     margin: 0;
 
     height: 100vh;
+    min-width: 38vw;
+    max-width: fit-content;
     display: flex;
     flex-direction: column;
     row-gap: 1vh;
     
     box-sizing: border-box;
     border: none;
-    max-width: fit-content;
 }
 
 #main {
-    width: 100%;
+    min-width: 100%;
+    max-width: fit-content;
     height: 4vh;
 
     display: flex;
     align-items: center;
     justify-content: center;
     column-gap: 1vw;
-    max-width: fit-content;
 }
 
 #main > * {
-    width: 25%;
+    width: 25%
 }
 
 #other {
@@ -64,16 +65,13 @@ div {
 table {
     border-collapse: collapse;
     width: 100%;
+    border: 2px solid black;
+    background-color: white;
 }
 
 tr:first-child {
-    border-top: 4px solid black;
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid black;
     font-weight: 900;
-}
-
-tr:last-child {
-    border-bottom: 4px solid black;
 }
 
 td {
@@ -85,10 +83,15 @@ td:first-child {
     font-weight: 900;
 }
 
+#rflag {
+    font-weight: 400;
+}
+
 input[type=text] {
     outline: none;
     text-align: center;
     text-transform: uppercase;
+    box-sizing: border-box;
 }
 
 td > input[type=text] {
@@ -96,7 +99,7 @@ td > input[type=text] {
 }
 
 input[type=text]:invalid {
-    border: 0.5px solid red;
+    border: 1.6px solid red;
     border-radius: 2px;
 }
 
@@ -105,7 +108,7 @@ input[type=text]:not(:disabled) {
 }
 
 input[type=text]:disabled {
-    visibility: collapse;
+    display: none;
 }
 
 button, select {

@@ -143,11 +143,11 @@
                 </tr>
                 <tr>
                     <td>ESP</td>
-                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="esp" type="text" value="FFFFFFFF"></td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="esp" type="text" value="0000FFFF"></td>
                 </tr>
                 <tr>
                     <td>EBP</td>
-                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="ebp" type="text" value="FFFFFFFF"></td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="ebp" type="text" value="0000FFFF"></td>
                 </tr>
                 <tr>
                     <td>EDP</td>
@@ -166,10 +166,6 @@
             <table id="flag">
                 <tr>
                     <td>FLAG</td>
-                    <td>32BITS</td>
-                </tr>
-                <tr>
-                    <td>FLAG</td>
                     <td id="rflag">00000000000000000011000000000010</td>
                 </tr>
             </table>
@@ -186,6 +182,13 @@
                 <tr>
                     <td>SRC</td>
                     <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="memsrc" type="text" placeholder="MEM SRC"></td>
+                </tr>
+            </table>
+            <!-- -------------------------------------------------------- -->
+            <table id="stack">
+                <tr>
+                    <td>STACK</td>
+                    <td><input pattern="^[0-9A-Fa-f]{8}$" maxlength="8" id="top" type="text" placeholder="STACK TOP"></td>
                 </tr>
             </table>
         </div>

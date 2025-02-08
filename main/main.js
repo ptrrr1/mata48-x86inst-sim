@@ -3,6 +3,12 @@ import { Utils, HexOperations } from "./utils.js";
 const dst = document.getElementById("dst");
 const src = document.getElementById("src");
 
+const basess = document.getElementById("base-ss");
+const limss = document.getElementById("limit-ss");
+
+basess.addEventListener("change", updatePointer);
+limss.addEventListener("change", updatePointer);
+
 const select = document.getElementById("inst");
 select.addEventListener("change", (e) => {
     const registerValues = Utils.get_register_values(document);
@@ -13,8 +19,8 @@ select.addEventListener("change", (e) => {
             src.disabled = false;
             break;
         case "pop":
-            dst.disabled = true;
-            src.disabled = false;
+            dst.disabled = false;
+            src.disabled = true;
             break;
         case "mul":
             dst.disabled = true;
@@ -86,10 +92,56 @@ button.addEventListener("click", (e) => {
             }
             break;
         case "push":
+            const src = registerValues.geral[regsrc] !== undefined ? registerValues.geral[regsrc] : registerValues.memsrc;
+            const esp = HexOperations.sub(registerValues.offset.esp, 4, 16);
+            const besp = HexOperations.add(registerValues.sdt.base_ss, esp, 16);
 
+            if (besp < parseInt(registerValues.sdt.base_ss, 16)) {
+                console.error("GPF");
+            } else {
+                Utils.set_register_values(document, {
+                    ...registerValues,
+                    offset: {
+                        ...registerValues.offset,
+                        esp: Utils.num_to_radix(esp, 16)
+                    },
+                    stacktop: src
+                })
+            }
             break;
         case "pop":
+            const dst = registerValues.geral[regdst] !== undefined ? registerValues.geral[regdst] : registerValues.memdst;  
+            const top = registerValues.stacktop;
 
+            const esp1 = HexOperations.add(registerValues.offset.esp, 4, 16);
+            const besp1 = HexOperations.add(registerValues.sdt.base_ss, esp1, 16);
+
+            if (besp1 > parseInt(registerValues.sdt.limit_ss, 16)) {
+                console.error("GPF");
+            } else {
+                if (registerValues.geral[regdst] !== undefined) {
+                    Utils.set_register_values(document, {
+                        ...registerValues,
+                        geral: {
+                            ...registerValues.geral,
+                            [dst]: top
+                        },
+                        offset: {
+                            ...registerValues.offset,
+                            esp: Utils.num_to_radix(esp1, 16)
+                        },
+                    });
+                } else {
+                    Utils.set_register_values(document, {
+                        ...registerValues,
+                        offset: {
+                            ...registerValues.offset,
+                            esp: Utils.num_to_radix(esp1, 16)
+                        },
+                        memdst: top
+                    });
+                }
+            }
             break;
         case "xchg":
             if (regdst.length == 3 && regsrc.length == 3) {
@@ -247,12 +299,35 @@ function operationsAbstraction(src, dst, r, func) {
     // new Flag
     let nF = Utils.eval_flag(n);
     // Set new values
+    if (r.geral[dst] !== undefined) {
+        Utils.set_register_values(document, {
+            ...r,
+            geral: {
+                ...r.geral,
+                [dst]: Utils.num_to_radix(n, 16)
+            },
+            flag: nF
+        });
+    } else {
+        Utils.set_register_values(document, {
+            ...r,
+            flag: nF,
+            memdst: Utils.num_to_radix(n, 16)
+        });
+    }
+}
+
+function updatePointer() {
+    const r = Utils.get_register_values(document);
+    const b = parseInt(basess.value, 16);
+    const l = parseInt(limss.value, 16);
+    const v = Utils.num_to_radix(l - b, 16);
     Utils.set_register_values(document, {
         ...r,
-        geral: {
-            ...r.geral,
-            [dst]: Utils.num_to_radix(n, 16)
-        },
-        flag: nF
-    });
+        offset: {
+            ...r.offset,
+            esp: v,
+            ebp: v
+        }
+    })
 }

@@ -12,6 +12,7 @@
  * @property {Object} offset - Offset registers.
  * @property {string} offset.eip - The value of the EIP register.
  * @property {string} offset.esp - The value of the ESP register.
+ * @property {string} offset.ebp - The value of the ESP register.
  * @property {string} offset.edp - The value of the EDP register.
  * @property {string} offset.edi - The value of the EDI register.
  * @property {string} offset.esi - The value of the ESI register.
@@ -25,6 +26,7 @@
  * @property {string} sdt.limit_ds
  * @property {string} memdst
  * @property {string} memsrc
+ * @property {string} stacktop
  */
 
 export class Utils {
@@ -115,6 +117,7 @@ export class Utils {
             offset: {
                 eip: document.getElementById("eip").value,
                 esp: document.getElementById("esp").value,
+                ebp: document.getElementById("ebp").value,
                 edp: document.getElementById("edp").value,
                 edi: document.getElementById("edi").value,
                 esi: document.getElementById("esi").value,
@@ -129,7 +132,8 @@ export class Utils {
                 limit_ds: document.getElementById("limit-ds").value,
             },
             memdst: document.getElementById("memdst").value,
-            memsrc: document.getElementById("memsrc").value
+            memsrc: document.getElementById("memsrc").value,
+            stacktop: document.getElementById("top").value
         }
     }
 
@@ -145,12 +149,14 @@ export class Utils {
         document.getElementById("edx").value = registers_state.geral.edx;
         document.getElementById("eip").value = registers_state.offset.eip;
         document.getElementById("esp").value = registers_state.offset.esp;
+        document.getElementById("ebp").value = registers_state.offset.ebp;
         document.getElementById("edp").value = registers_state.offset.edp;
         document.getElementById("edi").value = registers_state.offset.edi;
         document.getElementById("esi").value = registers_state.offset.esi;
         document.getElementById("rflag").innerText = registers_state.flag;
         document.getElementById("memdst").value = registers_state.memdst;
         document.getElementById("memsrc").value = registers_state.memsrc;
+        document.getElementById("top").value = registers_state.stacktop;
     }
 }
 
