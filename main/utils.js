@@ -54,23 +54,23 @@ export class Utils {
         let idx = -1;
         switch (code) {
             case "CF": // CARRY
-                bitstate == "1" ? console.log("CF") : console.log();
+                if (bitstate == "1") console.log("CF");
                 idx = flag.length - 1;
                 break;
             case "PF": // PARITY The number of 1s in the least significant byte of the result is even.
-                bitstate == "1" ? console.log("PF") : console.log();
+                if (bitstate == "1") console.log("PF");
                 idx = flag.length - 1 - 2;
                 break
             case "ZF": // ZERO The result of an operation is zero
-                bitstate == "1" ? console.log("ZF") : console.log();
+                if (bitstate == "1") console.log("ZF");
                 idx = flag.length - 1 - 6;
                 break
             case "SF": // SIGN The result is negative
-                bitstate == "1" ? console.log("SF") : console.log();
+                if (bitstate == "1") console.log("SF");
                 idx = flag.length - 1 - 7;
                 break
             case "OF": // OVERFLOW Indicates whether an arithmetic operation results in a signed overflow
-                bitstate == "1" ? console.log("OF") : console.log();
+                if (bitstate == "1") console.log("OF");
                 idx = flag.length - 1 - 11;
                 break
             default:

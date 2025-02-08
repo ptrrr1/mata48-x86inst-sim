@@ -68,6 +68,21 @@ button.addEventListener("click", (e) => {
                         [regdst]: registerValues.geral[regsrc]
                     },
                 });
+            } else if (regdst.length != 3 && regsrc.length == 3) {
+                // Set new values
+                Utils.set_register_values(document, {
+                    ...registerValues,
+                    memdst: registerValues.geral[regsrc]
+                });
+            } else if (regdst.length == 3 && regsrc.length != 3) {
+                // Set new values
+                Utils.set_register_values(document, {
+                    ...registerValues,
+                    geral: {
+                        ...registerValues.geral,
+                        [regdst]: registerValues.memsrc
+                    },
+                });
             }
             break;
         case "push":
@@ -77,194 +92,106 @@ button.addEventListener("click", (e) => {
 
             break;
         case "xchg":
-
+            if (regdst.length == 3 && regsrc.length == 3) {
+                // Set new values
+                const v = registerValues.geral[regsrc]
+                Utils.set_register_values(document, {
+                    ...registerValues,
+                    geral: {
+                        ...registerValues.geral,
+                        [regsrc]: registerValues.geral[regdst],
+                        [regdst]: v
+                    },
+                });
+            } else if (regdst.length != 3 && regsrc.length == 3) {
+                // Set new values
+                const v = registerValues.geral[regsrc]
+                Utils.set_register_values(document, {
+                    ...registerValues,
+                    geral: {
+                        ...registerValues.geral,
+                        [regsrc]: registerValues.memdst,
+                    },
+                    memdst: v
+                });
+            } else if (regdst.length == 3 && regsrc.length != 3) {
+                // Set new values
+                const v = registerValues.geral[regdst]
+                Utils.set_register_values(document, {
+                    ...registerValues,
+                    geral: {
+                        ...registerValues.geral,
+                        [regdst]: registerValues.memsrc,
+                    },
+                    memsrc: v
+                });
+            }
             break;
         case "add":
-            if (regdst.length == 3 && regsrc.length == 3) {
-                const v = parseInt(registerValues.geral[regsrc], 16);
-                const newVal = HexOperations.add(registerValues.geral[regdst], v, 16);
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        [regdst]: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(regsrc, regdst, registerValues, HexOperations.add);
             break;
         case "sub":
-            if (regdst.length == 3 && regsrc.length == 3) {
-                const v = parseInt(registerValues.geral[regsrc], 16);
-                const newVal = HexOperations.sub(registerValues.geral[regdst], v, 16);
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        [regdst]: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(regsrc, regdst, registerValues, HexOperations.sub);
             break;
         case "mul":
-            if (regsrc.length == 3) {
-                const v = parseInt(registerValues.geral.eax, 16);
-                const newVal = HexOperations.mul(registerValues.geral[regsrc], v, 16);
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        eax: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(regsrc, "eax", registerValues, HexOperations.mul);
             break;
         case "inc":
-            if (regdst.length == 3) {
-                const newVal = HexOperations.add(registerValues.geral[regdst], 1, 16);
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        [regdst]: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(1, regdst, registerValues, HexOperations.add);
             break;
         case "dec":
-            if (regdst.length == 3) {
-                const newVal = HexOperations.sub(registerValues.geral[regdst], 1, 16);
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        [regdst]: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(1, regdst, registerValues, HexOperations.sub);
             break;
         case "neg":
-            if (regdst.length == 3) {
-                const newVal = HexOperations.neg(registerValues.geral[regdst], 16);
-                console.log(newVal)
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        [regdst]: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(undefined, regdst, registerValues, HexOperations.neg);
             break;
         case "and":
-            if (regdst.length == 3 && regsrc.length == 3) {
-                const v = parseInt(registerValues.geral[regsrc], 16);
-                const newVal = HexOperations.and(registerValues.geral[regdst], v, 16);
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        [regdst]: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(regsrc, regdst, registerValues, HexOperations.and);
             break;
         case "or":
-            if (regdst.length == 3 && regsrc.length == 3) {
-                const v = parseInt(registerValues.geral[regsrc], 16);
-                const newVal = HexOperations.or(registerValues.geral[regdst], v, 16);
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        [regdst]: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(regsrc, regdst, registerValues, HexOperations.or);
             break;
         case "xor":
-            if (regdst.length == 3 && regsrc.length == 3) {
-                const v = parseInt(registerValues.geral[regsrc], 16);
-                const newVal = HexOperations.xor(registerValues.geral[regdst], v, 16);
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        [regdst]: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(regsrc, regdst, registerValues, HexOperations.xor);
             break;
         case "not":
-            if (regdst.length == 3) {
-                const newVal = HexOperations.not(registerValues.geral[regdst], 16);
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    geral: {
-                        ...registerValues.geral,
-                        [regdst]: Utils.num_to_radix(newVal, 16)
-                    },
-                    flag: newFlag
-                });
-            }
+            operationsAbstraction(undefined, regdst, registerValues, HexOperations.not);
             break;
         case "cmp":
-            if (regdst.length == 3 && regsrc.length == 3) {
-                const v = parseInt(registerValues.geral[regsrc], 16);
-                const newVal = HexOperations.sub(registerValues.geral[regdst], v, 16);
-                console.log(newVal < 0)
-                // new Flag
-                let newFlag = Utils.eval_flag(newVal);
-                // Set new values
-                Utils.set_register_values(document, {
-                    ...registerValues,
-                    flag: newFlag
-                });
-            }
+            const d = registerValues.geral[regdst] !== undefined ? registerValues.geral[regdst] : registerValues.memdst;
+            const s = registerValues.geral[regsrc] !== undefined ? registerValues.geral[regsrc] : registerValues.memsrc;
+
+            const v = parseInt(s, 16);
+            const newVal = HexOperations.sub(d, v, 16);
+            console.log(newVal)
+            // new Flag
+            let newFlag = Utils.eval_flag(newVal);
+            // Set new values
+            Utils.set_register_values(document, {
+                ...registerValues,
+                flag: newFlag
+            });
             break;
         case "jmp":
             if (regdst.length == 3) {
+                const v = parseInt(registerValues.geral[regdst], 16);
+                const newVal = HexOperations.add(registerValues.sdt.base_cs, v, 16);
+                const limit = parseInt(registerValues.sdt.limit_cs, 16);
+                if (newVal > limit) {
+                    console.error("GPF");
+                } else {
+                    // Set new values
+                    Utils.set_register_values(document, {
+                        ...registerValues,
+                        offset: {
+                            ...registerValues.offset,
+                            eip: Utils.num_to_radix(v, 16)
+                        },
+                    });
+                }
 
             } else {
-                const v = parseInt(regdst, 16);
+                const v = parseInt(registerValues.memdst, 16);
                 const newVal = HexOperations.add(registerValues.sdt.base_cs, v, 16);
                 const limit = parseInt(registerValues.sdt.limit_cs, 16);
                 if (newVal > limit) {
@@ -298,3 +225,34 @@ button.addEventListener("click", (e) => {
             break;
     }
 })
+
+/**
+ * 
+ * @param {PropertyKey} src 
+ * @param {PropertyKey} dst 
+ * @param {import("./utils.js").RegistersState} r - RegisterValues 
+ * @param {CallableFunction} func 
+ */
+function operationsAbstraction(src, dst, r, func) {
+    const d = r.geral[dst] !== undefined ? r.geral[dst] : r.memdst;
+    const s = r.geral[src] !== undefined ? r.geral[src] : r.memsrc;
+
+    const v = parseInt(s, 16);
+    let n;
+    if (src === undefined) {
+        n = func(d, 16);
+    } else {
+        n = func(d, Number.isInteger(src) ? src : v, 16);
+    }
+    // new Flag
+    let nF = Utils.eval_flag(n);
+    // Set new values
+    Utils.set_register_values(document, {
+        ...r,
+        geral: {
+            ...r.geral,
+            [dst]: Utils.num_to_radix(n, 16)
+        },
+        flag: nF
+    });
+}

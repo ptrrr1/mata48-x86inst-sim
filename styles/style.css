@@ -99,3 +99,30 @@ input[type=text]:invalid {
     border: 0.5px solid red;
     border-radius: 2px;
 }
+
+input[type=text]:not(:disabled) {
+    flex-grow: 1;
+}
+
+input[type=text]:disabled {
+    visibility: collapse;
+}
+
+button, select {
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: 2px;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+button:hover {
+    border-color: green;
+    color: green;
+}
+
+select:hover {
+    border-color: red;
+}
