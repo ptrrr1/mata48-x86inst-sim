@@ -45,6 +45,8 @@
 /**
  * @typedef {Object} Arrow
  * @property {string} text
+ * @property {boolean} draw
+ * @property {string | undefined} color
  */
 
 export class Utils {
@@ -385,9 +387,31 @@ export class CanvasUtils {
         this.ctx.restore(); // Restore the context state
     }
 
-    drawArrowTxt(x1, y1, x2, y2, text, color = "#000000", lineWidth = 1, arrowSize = 10, textOffset = 10) {
+    drawArrowTxt(x1, y1, x2, y2, text, color = "#000000", lineWidth = 1, arrowSize = 10, textOffset = 15) {
         this.drawArrow(x1, y1, x2, y2, color, lineWidth, arrowSize);
 
+        // Draw the text above the arrow
+        this.ctx.save();
+        this.ctx.fillStyle = color;
+        this.ctx.font = "16px Arial"; // Customize font size and family
+        this.ctx.textAlign = "center"; // Center text horizontally
+        this.ctx.textBaseline = "middle"; // Center text vertically
+
+        // Calculate text position (above the midpoint of the arrow)
+        const midX = (x1 + x2) / 2;
+        const midY = (y1 + y2) / 2;
+
+        this.ctx.translate(midX, midY);
+        if (x2 > x1) this.ctx.rotate(Math.atan2(y2 - y1, x2 - x1));
+        else this.ctx.rotate(Math.atan2(y2 - y1, x1 - x2));
+
+        this.ctx.fillText(text, 0, -textOffset);
+
+        // Restore the context to its original state
+        this.ctx.restore();
+    }
+
+    drawText(x1, y1, x2, y2, text, color = "#000000", textOffset = 0) {
         // Draw the text above the arrow
         this.ctx.save();
         this.ctx.fillStyle = color;
@@ -414,6 +438,7 @@ export class CanvasUtils {
      * @param {number} padding
      */
     drawDiagram(objs, padding = 10) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clearing
         this.drawDiagramSquares(objs.squares, padding);
         this.drawDiagramArrows(objs.arrows, objs.squares, padding);
     }
@@ -424,7 +449,8 @@ export class CanvasUtils {
      */
     drawDiagramSquares(sq, padding) {
         for (let i = 0; i < sq.length; i++) {
-            const x = padding + i * this.CENTER_H;
+            /* const factor = (i % 2 == 0) ? -1 : 1; */
+            const x = padding + i * this.CENTER_H; /* this.CENTER_H + factor * this.CENTER_H / 2; */
             const midx = x + sq[i].w / 2;
             const y1 = padding;
             const y2 = this.BOTTOM - sq[i].h - padding;
@@ -456,15 +482,21 @@ export class CanvasUtils {
      * @param {number} padding 
      */
     drawDiagramArrows(ar, sq, padding) {
-        const leftx = padding + sq[0].w / 2;
-        const rightx = padding + sq[1].w / 2 + this.CENTER_H;
+        const leftx = padding + sq[0].w / 2; /* this.CENTER_H - this.CENTER_H / 2 + sq[0].w / 2; */
+        const rightx = padding + sq[1].w / 2 + this.CENTER_H; /* this.CENTER_H + this.CENTER_H / 2 + sq[1].w / 2; */
         const starty = 3 * padding + sq[0].h;
+        const endy = this.BOTTOM - padding - sq[0].h
+        const len = (endy - starty) / ar.length;
         for (let i = 0; i < ar.length; i++) {
-            const y = starty + i * padding * 3;
-            if (i % 2 == 0) {
-                this.drawArrowTxt(leftx, y, rightx, y, ar[i].text);
+            const y = starty + len * i;
+            if (ar[i].draw) {
+                if (i % 2 == 0) {
+                    this.drawArrowTxt(leftx, y, rightx, y, ar[i].text);
+                } else {
+                    this.drawArrowTxt(rightx, y, leftx, y, ar[i].text);
+                }
             } else {
-                this.drawArrowTxt(rightx, y, leftx, y, ar[i].text);
+                this.drawText(leftx, y, rightx, y, ar[i].text, ar[i].color ? ar[i].color : "#000")
             }
         }
     }
