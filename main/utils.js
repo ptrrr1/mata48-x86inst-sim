@@ -29,6 +29,24 @@
  * @property {string} stacktop
  */
 
+/**
+ * @typedef {Object} Diagram
+ * @property {Array<Square>} squares
+ * @property {Array<Arrow>} arrows
+ */
+
+/**
+ * @typedef {Object} Square
+ * @property {number} w -- width
+ * @property {number} h -- height
+ * @property {string} text
+ */
+
+/**
+ * @typedef {Object} Arrow
+ * @property {string} text
+ */
+
 export class Utils {
     /**
      * Converte o valor para a base desejada
@@ -283,5 +301,171 @@ export class HexOperations {
     static xor(a, b, radix) {
         const val = parseInt(a, radix);
         return val ^ b;
+    }
+}
+
+export class CanvasUtils {
+    static CENTER_W;
+    static CENTER_H;
+    static RIGHT;
+    static BOTTOM;
+
+    /**
+     * 
+     * @param {Document} document 
+     */
+    constructor(document) {
+        const steps = document.getElementById("steps");
+        this.canvas = document.getElementById("canvas");
+        this.ctx = this.canvas.getContext("2d");
+        this.canvas.width = steps.clientWidth;
+        this.canvas.height = steps.clientHeight;
+        this.w = steps.clientWidth;
+        this.h = steps.clientHeight;
+        this.CENTER_W = this.w / 2;
+        this.CENTER_H = this.h / 2;
+        this.RIGHT = this.w;
+        this.BOTTOM = this.h;
+    }
+
+    drawSquare(x, y, w, h, color = "#000000", from_center = true) {
+        this.ctx.fillStyle = color;
+        if (from_center) {
+            this.ctx.strokeRect(x - w / 2, y - h / 2, w, h);
+        } else {
+            this.ctx.strokeRect(x, y, w, h);
+        }
+    }
+
+    drawSquareTxt(x, y, w, h, text, color = "#000000", from_center = true) {
+        this.drawSquare(x, y, w, h, color, from_center);
+
+         // Draw the text
+        this.ctx.fillStyle = color;
+        this.ctx.font = "20px Arial"; // Customize font size and family
+        this.ctx.textAlign = "center"; // Center text horizontally
+        this.ctx.textBaseline = "middle"; // Center text vertically
+
+        // Calculate text position
+        const textX = from_center ? x : x + w / 2;
+        const textY = from_center ? y : y + h / 2;
+
+        this.ctx.fillText(text, textX, textY);
+    }
+
+    drawLine(x1, y1, x2, y2, color = "#000000", lineWidth = 1) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(x1, y1);
+        this.ctx.lineTo(x2, y2);
+        this.ctx.strokeStyle = color;
+        this.ctx.lineWidth = lineWidth;
+        this.ctx.stroke();
+    }
+
+    drawArrow(x1, y1, x2, y2, color = "#000000", lineWidth = 1, arrowSize = 10) {
+        // Draw the line
+        this.drawLine(x1, y1, x2, y2, color, lineWidth);
+      
+        // Calculate the angle of the line
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+      
+        // Draw the arrowhead
+        this.ctx.save(); // Save the current context state
+        this.ctx.translate(x2, y2); // Move to the end of the line
+        this.ctx.rotate(angle); // Rotate to the angle of the line
+        this.ctx.fillStyle = color;
+      
+        // Draw the arrowhead as a triangle
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 0);
+        this.ctx.lineTo(-arrowSize, arrowSize / 2);
+        this.ctx.lineTo(-arrowSize, -arrowSize / 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+        this.ctx.restore(); // Restore the context state
+    }
+
+    drawArrowTxt(x1, y1, x2, y2, text, color = "#000000", lineWidth = 1, arrowSize = 10, textOffset = 10) {
+        this.drawArrow(x1, y1, x2, y2, color, lineWidth, arrowSize);
+
+        // Draw the text above the arrow
+        this.ctx.save();
+        this.ctx.fillStyle = color;
+        this.ctx.font = "16px Arial"; // Customize font size and family
+        this.ctx.textAlign = "center"; // Center text horizontally
+        this.ctx.textBaseline = "middle"; // Center text vertically
+
+        // Calculate text position (above the midpoint of the arrow)
+        const midX = (x1 + x2) / 2;
+        const midY = (y1 + y2) / 2;
+
+        this.ctx.translate(midX, midY);
+        if (x2 > x1) this.ctx.rotate(Math.atan2(y2 - y1, x2 - x1));
+        else this.ctx.rotate(Math.atan2(y2 - y1, x1 - x2));
+
+        this.ctx.fillText(text, 0, -textOffset);
+
+        // Restore the context to its original state
+        this.ctx.restore();
+    }
+    
+    /**
+     * @param {Diagram} objs 
+     * @param {number} padding
+     */
+    drawDiagram(objs, padding = 10) {
+        this.drawDiagramSquares(objs.squares, padding);
+        this.drawDiagramArrows(objs.arrows, objs.squares, padding);
+    }
+
+    /**
+     * @param {Array<Square>} sq
+     * @param {number} padding
+     */
+    drawDiagramSquares(sq, padding) {
+        for (let i = 0; i < sq.length; i++) {
+            const x = padding + i * this.CENTER_H;
+            const midx = x + sq[i].w / 2;
+            const y1 = padding;
+            const y2 = this.BOTTOM - sq[i].h - padding;
+            this.drawSquareTxt(
+                x, 
+                y1, 
+                sq[i].w, 
+                sq[i].h, 
+                sq[i].text,
+                "#000",
+                false
+            ) // TOP
+            this.drawSquareTxt(
+                x, 
+                y2, 
+                sq[i].w, 
+                sq[i].h,
+                sq[i].text,
+                "#000",
+                false
+            ) // BOTTOM
+            this.drawLine(midx, y1 + sq[i].h, midx, y2)
+        }
+    }
+
+    /**
+     * @param {Array<Arrow>} ar
+     * @param {Array<Square>} sq
+     * @param {number} padding 
+     */
+    drawDiagramArrows(ar, sq, padding) {
+        const leftx = padding + sq[0].w / 2;
+        const rightx = padding + sq[1].w / 2 + this.CENTER_H;
+        const starty = 3 * padding + sq[0].h;
+        for (let i = 0; i < ar.length; i++) {
+            const y = starty + i * padding * 3;
+            if (i % 2 == 0) {
+                this.drawArrowTxt(leftx, y, rightx, y, ar[i].text);
+            } else {
+                this.drawArrowTxt(rightx, y, leftx, y, ar[i].text);
+            }
+        }
     }
 }

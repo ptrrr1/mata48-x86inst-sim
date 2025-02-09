@@ -59,6 +59,8 @@ div {
 
 #steps {
     margin: 8px;
+    padding: 0;
+    overflow: hidden;
     flex-grow: 1;
 }
 

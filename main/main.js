@@ -1,4 +1,22 @@
-import { Utils, HexOperations } from "./utils.js";
+import { Utils, HexOperations, CanvasUtils } from "./utils.js";
+
+const objs = {
+    squares: [
+        {
+            w: 75,
+            h: 50,
+            text: "CPU"
+        },
+        {
+            w: 75,
+            h: 50,
+            text: "MEM"
+        },
+    ],
+    arrows: []
+}
+
+let canvas = new CanvasUtils(document);
 
 const dst = document.getElementById("dst");
 const src = document.getElementById("src");
@@ -275,11 +293,12 @@ button.addEventListener("click", (e) => {
         case "loopxx":
 
             break;
-    }
+    };
+
+    canvas.drawDiagram(objs);
 })
 
 /**
- * 
  * @param {PropertyKey} src 
  * @param {PropertyKey} dst 
  * @param {import("./utils.js").RegistersState} r - RegisterValues 
