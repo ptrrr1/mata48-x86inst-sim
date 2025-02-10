@@ -2,7 +2,7 @@
  * Represents the state of CPU registers and flags.
  * @typedef {Object} RegistersState
  * @property {string} inst - The value of the selected instruction.
- * @property {string} dst - The DST address 
+ * @property {string} dst - The DST address
  * @property {string} src - The SRC address
  * @property {Object} geral - General-purpose registers.
  * @property {string} geral.eax - The value of the EAX register.
@@ -52,24 +52,25 @@
 export class Utils {
     /**
      * Converte o valor para a base desejada
-     * @param {string | number} num 
-     * @param {number} radix 
-     * @param {number} size 
-     * @returns {string}    
+     * @param {string | number} num
+     * @param {number} radix
+     * @param {number} size
+     * @returns {string}
      */
     static num_to_radix(num, radix, size = 8) {
         const newVal =  (parseInt(num) >>> 0)
                             .toString(radix)
                             .padStart(size, "0")
+                            .toUpperCase()
         if (newVal.length == 8) { return newVal }
         else { return newVal.slice(newVal.length - 8, newVal.length) }
     }
 
     /**
      * Muda o respectivo bit flag para o desejado de acordo com o código
-     * @param {string} flag 
-     * @param {string} code 
-     * @param {string} bitstate 
+     * @param {string} flag
+     * @param {string} code
+     * @param {string} bitstate
      * @returns {string}
      */
     static set_flag_bit(flag, code, bitstate) {
@@ -103,8 +104,8 @@ export class Utils {
     }
 
     /**
-     * 
-     * @param {number} val 
+     *
+     * @param {number} val
      * @returns {string}
      */
     static eval_flag(val) {
@@ -118,7 +119,7 @@ export class Utils {
 
     /**
      * retorna um objeto com os valores de cada registrador
-     * @param {Document} document 
+     * @param {Document} document
      * @returns {RegistersState}
      */
     static get_register_values(document) {
@@ -138,7 +139,6 @@ export class Utils {
                 eip: document.getElementById("eip").value,
                 esp: document.getElementById("esp").value,
                 ebp: document.getElementById("ebp").value,
-                edp: document.getElementById("edp").value,
                 edi: document.getElementById("edi").value,
                 esi: document.getElementById("esi").value,
             },
@@ -159,8 +159,8 @@ export class Utils {
 
     /**
      * Atualiza o estado de todos os registradores
-     * @param {Document} document 
-     * @param {RegistersState} registers_state 
+     * @param {Document} document
+     * @param {RegistersState} registers_state
      */
     static set_register_values(document, registers_state) {
         document.getElementById("eax").value = registers_state.geral.eax;
@@ -170,7 +170,6 @@ export class Utils {
         document.getElementById("eip").value = registers_state.offset.eip;
         document.getElementById("esp").value = registers_state.offset.esp;
         document.getElementById("ebp").value = registers_state.offset.ebp;
-        document.getElementById("edp").value = registers_state.offset.edp;
         document.getElementById("edi").value = registers_state.offset.edi;
         document.getElementById("esi").value = registers_state.offset.esi;
         document.getElementById("rflag").innerText = registers_state.flag;
@@ -182,7 +181,7 @@ export class Utils {
 
 export class HexOperations {
     /**
-     * @param {number} val 
+     * @param {number} val
      * @returns {string} "1" | "0"
      */
     static is_zero(val) {
@@ -190,7 +189,7 @@ export class HexOperations {
     }
 
     /**
-     * @param {number} val 
+     * @param {number} val
      * @returns {string} "1" | "0"
      */
     static is_neg(val) {
@@ -198,7 +197,7 @@ export class HexOperations {
     }
 
     /**
-     * @param {number} val 
+     * @param {number} val
      * @returns {string} "1" | "0"
      */
     static is_overflow(val) {
@@ -206,7 +205,7 @@ export class HexOperations {
     }
 
     /**
-     * @param {number} val 
+     * @param {number} val
      * @returns {string} "1" | "0"
      */
     static parity_check(val) {
@@ -220,10 +219,10 @@ export class HexOperations {
     }
 
     /**
-     * @param {string} a 
-     * @param {number} b 
-     * @param {number} radix 
-     * @returns 
+     * @param {string} a
+     * @param {number} b
+     * @param {number} radix
+     * @returns
      */
     static add(a, b, radix) {
         const val = parseInt(a, radix);
@@ -231,10 +230,10 @@ export class HexOperations {
     }
 
     /**
-     * @param {string} a 
-     * @param {number} b 
-     * @param {number} radix 
-     * @returns 
+     * @param {string} a
+     * @param {number} b
+     * @param {number} radix
+     * @returns
      */
     static sub(a, b, radix) {
         const val = parseInt(a, radix);
@@ -242,10 +241,10 @@ export class HexOperations {
     }
 
     /**
-     * @param {string} a 
-     * @param {number} b 
-     * @param {number} radix 
-     * @returns 
+     * @param {string} a
+     * @param {number} b
+     * @param {number} radix
+     * @returns
      */
     static mul(a, b, radix) {
         const val = parseInt(a, radix);
@@ -253,9 +252,9 @@ export class HexOperations {
     }
 
     /**
-     * @param {string} a 
-     * @param {number} radix 
-     * @returns 
+     * @param {string} a
+     * @param {number} radix
+     * @returns
      */
     static neg(a, radix) {
         const val = parseInt(a, radix);
@@ -263,10 +262,10 @@ export class HexOperations {
     }
 
     /**
-     * @param {string} a 
-     * @param {number} b 
-     * @param {number} radix 
-     * @returns 
+     * @param {string} a
+     * @param {number} b
+     * @param {number} radix
+     * @returns
      */
     static and(a, b, radix) {
         const val = parseInt(a, radix);
@@ -274,10 +273,10 @@ export class HexOperations {
     }
 
     /**
-     * @param {string} a 
-     * @param {number} b 
-     * @param {number} radix 
-     * @returns 
+     * @param {string} a
+     * @param {number} b
+     * @param {number} radix
+     * @returns
      */
     static or(a, b, radix) {
         const val = parseInt(a, radix);
@@ -285,9 +284,9 @@ export class HexOperations {
     }
 
     /**
-     * @param {string} a 
-     * @param {number} radix 
-     * @returns 
+     * @param {string} a
+     * @param {number} radix
+     * @returns
      */
     static not(a, radix) {
         const val = parseInt(a, radix);
@@ -295,10 +294,10 @@ export class HexOperations {
     }
 
     /**
-     * @param {string} a 
-     * @param {number} b 
-     * @param {number} radix 
-     * @returns 
+     * @param {string} a
+     * @param {number} b
+     * @param {number} radix
+     * @returns
      */
     static xor(a, b, radix) {
         const val = parseInt(a, radix);
@@ -313,10 +312,11 @@ export class CanvasUtils {
     static BOTTOM;
 
     /**
-     * 
-     * @param {Document} document 
+     *
+     * @param {Document} document
+     * @param {Diagram} objs
      */
-    constructor(document) {
+    constructor(document, objs) {
         const steps = document.getElementById("steps");
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
@@ -328,9 +328,18 @@ export class CanvasUtils {
         this.CENTER_H = this.h / 2;
         this.RIGHT = this.w;
         this.BOTTOM = this.h;
+        this.objs = objs;
     }
 
-    drawSquare(x, y, w, h, color = "#000000", from_center = true) {
+    /**
+     * @param {number} x
+     * @param {number} y
+     * @param {number} w
+     * @param {number} h
+     * @param {string} color
+     * @param {boolean} from_center
+     */
+    drawSquare(x, y, w, h, color = "#FFD27F", from_center = true) {
         this.ctx.fillStyle = color;
         if (from_center) {
             this.ctx.strokeRect(x - w / 2, y - h / 2, w, h);
@@ -339,7 +348,16 @@ export class CanvasUtils {
         }
     }
 
-    drawSquareTxt(x, y, w, h, text, color = "#000000", from_center = true) {
+    /**
+     * @param {number} x
+     * @param {number} y
+     * @param {number} w
+     * @param {number} h
+     * @param {string} text
+     * @param {string} color
+     * @param {boolean} from_center
+     */
+    drawSquareTxt(x, y, w, h, text, color = "#FFD27F", from_center = true) {
         this.drawSquare(x, y, w, h, color, from_center);
 
          // Draw the text
@@ -355,7 +373,15 @@ export class CanvasUtils {
         this.ctx.fillText(text, textX, textY);
     }
 
-    drawLine(x1, y1, x2, y2, color = "#000000", lineWidth = 1) {
+    /**
+     * @param {number} x1
+     * @param {number} y1
+     * @param {number} x2
+     * @param {number} y2
+     * @param {string} color
+     * @param {number} lineWidth
+     */
+    drawLine(x1, y1, x2, y2, color = "#FFD27F", lineWidth = 1) {
         this.ctx.beginPath();
         this.ctx.moveTo(x1, y1);
         this.ctx.lineTo(x2, y2);
@@ -364,19 +390,28 @@ export class CanvasUtils {
         this.ctx.stroke();
     }
 
-    drawArrow(x1, y1, x2, y2, color = "#000000", lineWidth = 1, arrowSize = 10) {
+    /**
+     * @param {number} x1
+     * @param {number} y1
+     * @param {number} x2
+     * @param {number} y2
+     * @param {string} color
+     * @param {number} lineWidth
+     * @param {number} arrowSize
+     */
+    drawArrow(x1, y1, x2, y2, color = "#FFD27F", lineWidth = 1, arrowSize = 10) {
         // Draw the line
         this.drawLine(x1, y1, x2, y2, color, lineWidth);
-      
+
         // Calculate the angle of the line
         const angle = Math.atan2(y2 - y1, x2 - x1);
-      
+
         // Draw the arrowhead
         this.ctx.save(); // Save the current context state
         this.ctx.translate(x2, y2); // Move to the end of the line
         this.ctx.rotate(angle); // Rotate to the angle of the line
         this.ctx.fillStyle = color;
-      
+
         // Draw the arrowhead as a triangle
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
@@ -387,13 +422,24 @@ export class CanvasUtils {
         this.ctx.restore(); // Restore the context state
     }
 
-    drawArrowTxt(x1, y1, x2, y2, text, color = "#000000", lineWidth = 1, arrowSize = 10, textOffset = 15) {
+    /**
+     * @param {number} x1
+     * @param {number} y1
+     * @param {number} x2
+     * @param {number} y2
+     * @param {string} text
+     * @param {string} color
+     * @param {number} lineWidth
+     * @param {number} arrowSize
+     * @param {number} textOffset
+     */
+    drawArrowTxt(x1, y1, x2, y2, text, color = "#FFD27F", lineWidth = 1, arrowSize = 10, textOffset = 15) {
         this.drawArrow(x1, y1, x2, y2, color, lineWidth, arrowSize);
 
         // Draw the text above the arrow
         this.ctx.save();
         this.ctx.fillStyle = color;
-        this.ctx.font = "16px Arial"; // Customize font size and family
+        this.ctx.font = "14px Arial"; // Customize font size and family
         this.ctx.textAlign = "center"; // Center text horizontally
         this.ctx.textBaseline = "middle"; // Center text vertically
 
@@ -411,11 +457,20 @@ export class CanvasUtils {
         this.ctx.restore();
     }
 
-    drawText(x1, y1, x2, y2, text, color = "#000000", textOffset = 0) {
+    /**
+     * @param {number} x1
+     * @param {number} y1
+     * @param {number} x2
+     * @param {number} y2
+     * @param {string} text
+     * @param {string} color
+     * @param {number} textOffset
+     */
+    drawText(x1, y1, x2, y2, text, color = "#FFD27F", textOffset = 10) {
         // Draw the text above the arrow
         this.ctx.save();
         this.ctx.fillStyle = color;
-        this.ctx.font = "16px Arial"; // Customize font size and family
+        this.ctx.font = "14px Arial"; // Customize font size and family
         this.ctx.textAlign = "center"; // Center text horizontally
         this.ctx.textBaseline = "middle"; // Center text vertically
 
@@ -432,15 +487,15 @@ export class CanvasUtils {
         // Restore the context to its original state
         this.ctx.restore();
     }
-    
+
     /**
-     * @param {Diagram} objs 
+     * @param {Diagram} objs
      * @param {number} padding
      */
     drawDiagram(objs, padding = 10) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clearing
-        this.drawDiagramSquares(objs.squares, padding);
         this.drawDiagramArrows(objs.arrows, objs.squares, padding);
+        this.drawDiagramSquares(objs.squares, padding);
     }
 
     /**
@@ -449,27 +504,27 @@ export class CanvasUtils {
      */
     drawDiagramSquares(sq, padding) {
         for (let i = 0; i < sq.length; i++) {
-            /* const factor = (i % 2 == 0) ? -1 : 1; */
-            const x = padding + i * this.CENTER_H; /* this.CENTER_H + factor * this.CENTER_H / 2; */
+            const factor = (i % 2 == 0) ? -1 : 1;
+            const x = /* padding + i * this.CENTER_H; */ this.CENTER_H + factor * this.CENTER_H / 2;
             const midx = x + sq[i].w / 2;
             const y1 = padding;
             const y2 = this.BOTTOM - sq[i].h - padding;
             this.drawSquareTxt(
-                x, 
-                y1, 
-                sq[i].w, 
-                sq[i].h, 
+                x,
+                y1,
+                sq[i].w,
+                sq[i].h,
                 sq[i].text,
-                "#000",
+                "#FFD27F",
                 false
             ) // TOP
             this.drawSquareTxt(
-                x, 
-                y2, 
-                sq[i].w, 
+                x,
+                y2,
+                sq[i].w,
                 sq[i].h,
                 sq[i].text,
-                "#000",
+                "#FFD27F",
                 false
             ) // BOTTOM
             this.drawLine(midx, y1 + sq[i].h, midx, y2)
@@ -479,11 +534,11 @@ export class CanvasUtils {
     /**
      * @param {Array<Arrow>} ar
      * @param {Array<Square>} sq
-     * @param {number} padding 
+     * @param {number} padding
      */
     drawDiagramArrows(ar, sq, padding) {
-        const leftx = padding + sq[0].w / 2; /* this.CENTER_H - this.CENTER_H / 2 + sq[0].w / 2; */
-        const rightx = padding + sq[1].w / 2 + this.CENTER_H; /* this.CENTER_H + this.CENTER_H / 2 + sq[1].w / 2; */
+        const leftx = /* padding + sq[0].w / 2; */ this.CENTER_H - this.CENTER_H / 2 + sq[0].w / 2;
+        const rightx = /* padding + sq[1].w / 2 + this.CENTER_H; */ this.CENTER_H + this.CENTER_H / 2 + sq[1].w / 2;
         const starty = 3 * padding + sq[0].h;
         const endy = this.BOTTOM - padding - sq[0].h
         const len = (endy - starty) / ar.length;
@@ -496,8 +551,49 @@ export class CanvasUtils {
                     this.drawArrowTxt(rightx, y, leftx, y, ar[i].text);
                 }
             } else {
-                this.drawText(leftx, y, rightx, y, ar[i].text, ar[i].color ? ar[i].color : "#000")
+                this.drawText(leftx, y, rightx, y, ar[i].text, ar[i].color ? ar[i].color : "#FFD27F")
             }
         }
+    }
+
+    /**
+     * @param {string} text
+     * @param {boolean} draw
+     * @param {string} color
+     */
+    addArrow(text, draw = true, color = "#FFD27F") {
+        this.objs.arrows.push({text: text, draw: draw, color: color});
+    }
+
+    /**
+     * @param {string} reg
+     * @param {string} base
+     * @param {string} limit
+     * @param {string} inst
+     * @param {string} retmsg
+     * @returns
+     */
+    checkIfGpf(reg, base, limit, inst, retmsg = "", skipfetch = false) {
+        // Step 1
+        const startp = reg.toUpperCase();
+        this.addArrow(`Checar se ${base} + ${startp} <= ${limit}`, false, "#ff0000");
+        const seipcs = HexOperations.add(base, parseInt(startp, 16), 16);
+        let isgpf = false;
+        if (seipcs >= parseInt(limit, 16)) {
+            this.addArrow("GPF Neste caso, Excede Limite", false, "#ff0000");
+            console.error("GPF");
+            isgpf = true;
+        } else {
+            this.addArrow(`${Utils.num_to_radix(seipcs, 16).toUpperCase()} < ${limit}`, false, "#00ff00");
+            if (!skipfetch) {
+                this.addArrow("Buscar Endereço Calculado", true);
+                if (retmsg === "") this.addArrow(`Retorna ${inst} & INC EIP ${startp} -> ${Utils.num_to_radix(HexOperations.add(startp, 4, 16), 16).toUpperCase()}`, true);
+                else this.addArrow(retmsg, true);
+            }
+        }
+
+        const nextp = Utils.num_to_radix(HexOperations.add(startp, 4, 16), 16).toUpperCase();
+
+        return [isgpf, nextp]
     }
 }
