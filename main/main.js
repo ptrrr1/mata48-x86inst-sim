@@ -90,6 +90,7 @@ button.addEventListener("click", (e) => {
     switch (registerValues.inst) {
         case "move":
             if (regdst.length == 3 && regsrc.length == 3) {
+                const [_, neip, nedi, nesi] = steps4_2(registerValues, false, false);
                 // Set new values
                 Utils.set_register_values(document, {
                     ...registerValues,
@@ -97,14 +98,28 @@ button.addEventListener("click", (e) => {
                         ...registerValues.geral,
                         [regdst]: registerValues.geral[regsrc]
                     },
+                    offset: {
+                        ...registerValues.offset,
+                        eip: neip,
+                        edi: nedi,
+                        esi: nesi
+                    }
                 });
             } else if (regdst.length != 3 && regsrc.length == 3) {
+                const [_, neip, nedi, nesi] = steps4_2(registerValues, false, true);
                 // Set new values
                 Utils.set_register_values(document, {
                     ...registerValues,
-                    memdst: registerValues.geral[regsrc]
+                    memdst: registerValues.geral[regsrc],
+                    offset: {
+                        ...registerValues.offset,
+                        eip: neip,
+                        edi: nedi,
+                        esi: nesi
+                    }
                 });
             } else if (regdst.length == 3 && regsrc.length != 3) {
+                const [_, neip, nedi, nesi] = steps4_2(registerValues, true, false);
                 // Set new values
                 Utils.set_register_values(document, {
                     ...registerValues,
@@ -112,6 +127,26 @@ button.addEventListener("click", (e) => {
                         ...registerValues.geral,
                         [regdst]: registerValues.memsrc
                     },
+                    offset: {
+                        ...registerValues.offset,
+                        eip: neip,
+                        edi: nedi,
+                        esi: nesi   
+                    }
+                });
+            } else {
+                const [_, neip, nedi, nesi] = steps4_2(registerValues, true, true);
+
+                // Set new values
+                Utils.set_register_values(document, {
+                    ...registerValues,
+                    offset: {
+                        ...registerValues.offset,
+                        eip: neip,
+                        edi: nedi,
+                        esi: nesi
+                    },
+                    memdst: registerValues.memsrc
                 });
             }
             break;
@@ -127,7 +162,7 @@ button.addEventListener("click", (e) => {
                     ...registerValues,
                     offset: {
                         ...registerValues.offset,
-                        esp: Utils.num_to_radix(esp, 16)
+                        esp: Utils.num_to_radix(esp, 16),
                     },
                     stacktop: src
                 })
@@ -152,7 +187,8 @@ button.addEventListener("click", (e) => {
                         },
                         offset: {
                             ...registerValues.offset,
-                            esp: Utils.num_to_radix(esp1, 16)
+                            esp: Utils.num_to_radix(esp1, 16),
+                            eip: Utils.num_to_radix(HexOperations.add(registerValues.offset.eip, 4, 16), 16)
                         },
                     });
                 } else {
@@ -160,7 +196,8 @@ button.addEventListener("click", (e) => {
                         ...registerValues,
                         offset: {
                             ...registerValues.offset,
-                            esp: Utils.num_to_radix(esp1, 16)
+                            esp: Utils.num_to_radix(esp1, 16),
+                            eip: Utils.num_to_radix(HexOperations.add(registerValues.offset.eip, 4, 16), 16)
                         },
                         memdst: top
                     });
@@ -188,6 +225,10 @@ button.addEventListener("click", (e) => {
                         ...registerValues.geral,
                         [regsrc]: registerValues.memdst,
                     },
+                    offset: {
+                        ...registerValues.offset,
+                        eip: Utils.num_to_radix(HexOperations.add(registerValues.offset.eip, 4, 16), 16)
+                    },
                     memdst: v
                 });
             } else if (regdst.length == 3 && regsrc.length != 3) {
@@ -198,6 +239,10 @@ button.addEventListener("click", (e) => {
                     geral: {
                         ...registerValues.geral,
                         [regdst]: registerValues.memsrc,
+                    },
+                    offset: {
+                        ...registerValues.offset,
+                        eip: Utils.num_to_radix(HexOperations.add(registerValues.offset.eip, 4, 16), 16)
                     },
                     memsrc: v
                 });
@@ -600,7 +645,7 @@ function steps4_2(r, dstismem, srcismem) {
                                             r.sdt.base_ds,
                                             r.sdt.limit_ds,
                                             "",
-                                            `Retorna ${r.memdst} & Atualiza EDI & ESI`
+                                            `Retorna ${r.memdst.toUpperCase()} & Atualiza EDI & ESI`
                                         );
             }
             if (!isgpf3) uptodatedi = Utils.num_to_radix(HexOperations.sub(nextedp3, 4, 16), 16);
@@ -622,7 +667,7 @@ function steps4_2(r, dstismem, srcismem) {
                                                 r.sdt.base_ds,
                                                 r.sdt.limit_ds,
                                                 "",
-                                                `Retorna ${r.memsrc} & Atualiza ESI`
+                                                `Retorna ${r.memsrc.toUpperCase()} & Atualiza ESI`
                                             );
                 }
                 if (!isgpf4) uptodatesi = Utils.num_to_radix(HexOperations.sub(nextedp4, 4, 16), 16);
@@ -665,7 +710,7 @@ function steps4_2(r, dstismem, srcismem) {
                                                 r.sdt.base_ds,
                                                 r.sdt.limit_ds,
                                                 "",
-                                                `Retorna ${r.memsrc} & Atualiza ESI`
+                                                `Retorna ${r.memsrc.toUpperCase()} & Atualiza ESI`
                                             );
                 }
                 if (!isgpf4) uptodatesi = Utils.num_to_radix(HexOperations.sub(nextedp4, 4, 16), 16);
